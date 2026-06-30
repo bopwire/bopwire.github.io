@@ -1,4 +1,4 @@
-# MusicChain — Technical White Paper
+# Bopwire — Technical White Paper
 
 *A peer-to-peer music network where the listeners are the infrastructure, content
 is verified by cryptographic fingerprint, and every play settles on a purpose-built
@@ -45,7 +45,7 @@ deals), a **content-delivery network** (servers that ship the audio), and a
 that stack and receives a few tenths of a cent per stream, opaquely, weeks later.
 The CDN is a fixed cost the platform pays for and controls.
 
-MusicChain re-arranges that stack so the **people listening also supply the
+Bopwire re-arranges that stack so the **people listening also supply the
 delivery network**, the **payment is settled per play on a public ledger**, and no
 single company owns the pipe. The hard part isn't any one of those ideas — it's
 making them work *together* without a central server in the middle.
@@ -189,7 +189,7 @@ session reports who served the bytes.
 ## 5. Content identity — fingerprinting & canonical hashes
 
 **In plain terms.** Two people can upload "the same song" as different files
-(different bitrate, different encoder, a re-rip). MusicChain recognizes them as the
+(different bitrate, different encoder, a re-rip). Bopwire recognizes them as the
 *same song* by listening to them, not by comparing file bytes. That way the swarm
 pools every copy together and the artist earns no matter which copy played.
 
@@ -260,16 +260,16 @@ and refetched elsewhere.
 **In plain terms.** Beyond asking the full node "who has this song," peers also keep
 a distributed phone-book (a DHT) so discovery survives even if a node is busy. The
 important property: this phone-book is **private** — it only talks to other
-MusicChain nodes, never the public BitTorrent network.
+Bopwire nodes, never the public BitTorrent network.
 
 **Under the hood.**
 - The DHT speaks the standard Kademlia/KRPC wire format **but every packet carries a
   private network tag** (a top-level `"mc":"mcnet1"` key). Any inbound packet
   missing the tag is dropped at decode — so the public BitTorrent mainline (all the
-  `:6881` nodes) can never enter the routing table, and MusicChain nodes never
-  answer them. It bootstraps only from configured MusicChain nodes, never the public
+  `:6881` nodes) can never enter the routing table, and Bopwire nodes never
+  answer them. It bootstraps only from configured Bopwire nodes, never the public
   routers (`router.bittorrent.com`, etc.).
-- This keeps the routing table full of *only* MusicChain peers, so content lookups
+- This keeps the routing table full of *only* Bopwire peers, so content lookups
   aren't diluted by millions of unrelated nodes. Bump the magic to fork a separate
   network (e.g. testnet vs mainnet) — nodes with mismatched tags simply ignore each
   other.
@@ -420,7 +420,7 @@ the blockchain itself**, not by any operator's wallet.
 | **Value transfer** | secp256k1 signature + inline pubkey cross-checked to `from` address + per-sender nonce (anti-replay). |
 | **Play minting** | Node-signed `PlayProof`; single-use `session_id`; 50% coverage + heartbeat-density gates. |
 | **Piece integrity** | Per-256 KB SHA-256 manifest verified on arrival; whole-file `content_hash` backstop. |
-| **Network isolation** | Private DHT tag drops all non-MusicChain packets; private bootstrap only. |
+| **Network isolation** | Private DHT tag drops all non-Bopwire packets; private bootstrap only. |
 | **Escrow** | Funds chain-held at a deterministic address; destination-bound; quorum-released; not operator-custodied. |
 | **Sybil / cheating** | Permissioned, vouched moderators; cubic burn past the play threshold; replay-proof session/nonce sets. |
 | **Identity** | One secp256k1 key = peer-id = wallet address (single identity across network and ledger). |
@@ -476,7 +476,7 @@ CPU and memory are not the constraint at these scales — bandwidth is.
 
 ## 15. Decentralization posture
 
-MusicChain is **decentralized where it can be and centralized only where a public
+Bopwire is **decentralized where it can be and centralized only where a public
 process would be unsafe** — and it keeps those layers separate on purpose:
 
 - **Decentralized:** content distribution (the swarm), discovery (private DHT +
@@ -500,7 +500,7 @@ takedown) confined to a narrow, accountable, non-custodial role.
 
 ---
 
-*This document describes the system as implemented across the `musicchain`
-(C++ node/chain), `librats` (P2P transport), and `musicchain_player`
+*This document describes the system as implemented across the `bopwire`
+(C++ node/chain), `librats` (P2P transport), and `bopwire_player`
 (cross-platform client) components. It is a technical specification, not an offer,
 solicitation, or financial instrument.*

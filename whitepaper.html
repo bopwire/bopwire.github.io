@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MusicChain — Technical White Paper</title><style>
+<title>Bopwire — Technical White Paper</title><style>
 :root{--ink:#1a1f24;--muted:#5b6670;--line:#e2e6ea;--bg:#ffffff;--accent:#0a7d5a;--code:#f4f6f8;}
 *{box-sizing:border-box}
 body{margin:0;background:#eef1f3;color:var(--ink);
@@ -45,9 +45,9 @@ li{margin:.25em 0}
 @media(max-width:680px){.wrap{padding:36px 22px}.topbar{padding:12px 22px}}
 </style></head>
 <body>
-<div class="topbar"><span>MusicChain — Technical White Paper</span>
+<div class="topbar"><span>Bopwire — Technical White Paper</span>
 <span><a href="index.html">Home</a> &nbsp;·&nbsp; <a href="whitepaper.pdf">PDF</a></span></div>
-<main class="wrap"><h1>MusicChain — Technical White Paper</h1>
+<main class="wrap"><h1>Bopwire — Technical White Paper</h1>
 <p>*A peer-to-peer music network where the listeners are the infrastructure, content is verified by cryptographic fingerprint, and every play settles on a purpose-built blockchain.*</p>
 <hr/>
 <h2>How to read this paper</h2>
@@ -74,7 +74,7 @@ li{margin:.25em 0}
 <hr/>
 <h2>1. The problem</h2>
 <p>Streaming services are three businesses stacked together: a <strong>catalogue</strong> (rights deals), a <strong>content-delivery network</strong> (servers that ship the audio), and a <strong>payment rail</strong> (who gets paid, how much, when). The artist sits at the bottom of that stack and receives a few tenths of a cent per stream, opaquely, weeks later. The CDN is a fixed cost the platform pays for and controls.</p>
-<p>MusicChain re-arranges that stack so the <strong>people listening also supply the delivery network</strong>, the <strong>payment is settled per play on a public ledger</strong>, and no single company owns the pipe. The hard part isn&#x27;t any one of those ideas — it&#x27;s making them work *together* without a central server in the middle.</p>
+<p>Bopwire re-arranges that stack so the <strong>people listening also supply the delivery network</strong>, the <strong>payment is settled per play on a public ledger</strong>, and no single company owns the pipe. The hard part isn&#x27;t any one of those ideas — it&#x27;s making them work *together* without a central server in the middle.</p>
 <hr/>
 <h2>2. The core idea</h2>
 <p>Three mechanisms are wired into one loop:</p>
@@ -184,7 +184,7 @@ li{margin:.25em 0}
 <p><strong>Why two parallel tracks?</strong> The <strong>audio</strong> path (①②) and the <strong>accounting</strong> path (③④) are deliberately decoupled. Audio flows peer-to-peer through relays; payment flows through the full node&#x27;s session pipeline. They meet only at the end, when the session reports who served the bytes.</p>
 <hr/>
 <h2>5. Content identity — fingerprinting &amp; canonical hashes</h2>
-<p><strong>In plain terms.</strong> Two people can upload &quot;the same song&quot; as different files (different bitrate, different encoder, a re-rip). MusicChain recognizes them as the *same song* by listening to them, not by comparing file bytes. That way the swarm pools every copy together and the artist earns no matter which copy played.</p>
+<p><strong>In plain terms.</strong> Two people can upload &quot;the same song&quot; as different files (different bitrate, different encoder, a re-rip). Bopwire recognizes them as the *same song* by listening to them, not by comparing file bytes. That way the swarm pools every copy together and the artist earns no matter which copy played.</p>
 <p><strong>Under the hood.</strong></p>
 <ul>
 <li>Every song carries two hashes: a <strong><code>content_hash</code></strong> (SHA-256 of the exact audio</li>
@@ -236,14 +236,14 @@ li{margin:.25em 0}
 <p>  cap; a downloader opens <strong>one flow per seeder</strong> (a process-global per-seeder   window) and aggregates across many — so total speed scales with swarm size while   no single seeder is overloaded. Streaming biases to the next-needed pieces from   the fastest seeders; bulk download fans wide. An <strong>endgame</strong> mode duplicate-fetches   the final pieces so one slow seeder can&#x27;t stall completion.</p>
 <hr/>
 <h2>7. The discovery layer — a private DHT</h2>
-<p><strong>In plain terms.</strong> Beyond asking the full node &quot;who has this song,&quot; peers also keep a distributed phone-book (a DHT) so discovery survives even if a node is busy. The important property: this phone-book is <strong>private</strong> — it only talks to other MusicChain nodes, never the public BitTorrent network.</p>
+<p><strong>In plain terms.</strong> Beyond asking the full node &quot;who has this song,&quot; peers also keep a distributed phone-book (a DHT) so discovery survives even if a node is busy. The important property: this phone-book is <strong>private</strong> — it only talks to other Bopwire nodes, never the public BitTorrent network.</p>
 <p><strong>Under the hood.</strong></p>
 <ul>
 <li>The DHT speaks the standard Kademlia/KRPC wire format **but every packet carries a</li>
 </ul>
-<p>  private network tag** (a top-level <code>&quot;mc&quot;:&quot;mcnet1&quot;</code> key). Any inbound packet   missing the tag is dropped at decode — so the public BitTorrent mainline (all the   <code>:6881</code> nodes) can never enter the routing table, and MusicChain nodes never   answer them. It bootstraps only from configured MusicChain nodes, never the public   routers (<code>router.bittorrent.com</code>, etc.).</p>
+<p>  private network tag** (a top-level <code>&quot;mc&quot;:&quot;mcnet1&quot;</code> key). Any inbound packet   missing the tag is dropped at decode — so the public BitTorrent mainline (all the   <code>:6881</code> nodes) can never enter the routing table, and Bopwire nodes never   answer them. It bootstraps only from configured Bopwire nodes, never the public   routers (<code>router.bittorrent.com</code>, etc.).</p>
 <ul>
-<li>This keeps the routing table full of *only* MusicChain peers, so content lookups</li>
+<li>This keeps the routing table full of *only* Bopwire peers, so content lookups</li>
 </ul>
 <p>  aren&#x27;t diluted by millions of unrelated nodes. Bump the magic to fork a separate   network (e.g. testnet vs mainnet) — nodes with mismatched tags simply ignore each   other.</p>
 <ul>
@@ -355,7 +355,7 @@ li{margin:.25em 0}
 <tr><td><strong>Value transfer</strong></td><td>secp256k1 signature + inline pubkey cross-checked to <code>from</code> address + per-sender nonce (anti-replay).</td></tr>
 <tr><td><strong>Play minting</strong></td><td>Node-signed <code>PlayProof</code>; single-use <code>session_id</code>; 50% coverage + heartbeat-density gates.</td></tr>
 <tr><td><strong>Piece integrity</strong></td><td>Per-256 KB SHA-256 manifest verified on arrival; whole-file <code>content_hash</code> backstop.</td></tr>
-<tr><td><strong>Network isolation</strong></td><td>Private DHT tag drops all non-MusicChain packets; private bootstrap only.</td></tr>
+<tr><td><strong>Network isolation</strong></td><td>Private DHT tag drops all non-Bopwire packets; private bootstrap only.</td></tr>
 <tr><td><strong>Escrow</strong></td><td>Funds chain-held at a deterministic address; destination-bound; quorum-released; not operator-custodied.</td></tr>
 <tr><td><strong>Sybil / cheating</strong></td><td>Permissioned, vouched moderators; cubic burn past the play threshold; replay-proof session/nonce sets.</td></tr>
 <tr><td><strong>Identity</strong></td><td>One secp256k1 key = peer-id = wallet address (single identity across network and ledger).</td></tr>
@@ -396,7 +396,7 @@ li{margin:.25em 0}
 <p>CPU and memory are not the constraint at these scales — bandwidth is.</p>
 <hr/>
 <h2>15. Decentralization posture</h2>
-<p>MusicChain is <strong>decentralized where it can be and centralized only where a public process would be unsafe</strong> — and it keeps those layers separate on purpose:</p>
+<p>Bopwire is <strong>decentralized where it can be and centralized only where a public process would be unsafe</strong> — and it keeps those layers separate on purpose:</p>
 <ul>
 <li><strong>Decentralized:</strong> content distribution (the swarm), discovery (private DHT +</li>
 </ul>
@@ -411,4 +411,4 @@ li{margin:.25em 0}
 <p>  operating as a node on the *same terms as any operator* (no special token reward,   no fee, no allocation). The intended trajectory is the Linux model — a steward atop   a widening, independent base of node operators and moderators, with issuance   immutable underneath.</p>
 <p>The design goal is a network whose <strong>value is created by its participants and recorded on a ledger no one privately owns</strong>, with the unavoidable trust (identity, takedown) confined to a narrow, accountable, non-custodial role.</p>
 <hr/>
-<p>*This document describes the system as implemented across the <code>musicchain</code> (C++ node/chain), <code>librats</code> (P2P transport), and <code>musicchain_player</code> (cross-platform client) components. It is a technical specification, not an offer, solicitation, or financial instrument.*</p></main></body></html>
+<p>*This document describes the system as implemented across the <code>bopwire</code> (C++ node/chain), <code>librats</code> (P2P transport), and <code>bopwire_player</code> (cross-platform client) components. It is a technical specification, not an offer, solicitation, or financial instrument.*</p></main></body></html>
