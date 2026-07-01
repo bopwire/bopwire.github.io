@@ -23,8 +23,7 @@ described purely as the network's internal accounting and reward unit.*
 11. Wallets, transfers, and non-custodial escrow
 12. Security model
 13. Governance & moderation
-14. Scaling — what the bandwidth actually costs
-15. Decentralization posture
+14. Decentralization posture
 
 ---
 
@@ -255,7 +254,7 @@ outputs and applies it to the next block.
   reward lanes required **no chain reset**.
 - The chain is currently produced/validated by a single full node (a permissioned
   validator); light-client players don't validate blocks, they trust the node's
-  signed results. Multi-validator consensus is a forward step (see §15).
+  signed results. Multi-validator consensus is a forward step (see §14).
 
 ---
 
@@ -371,7 +370,7 @@ a flood of fake moderators approving fake identity claims would be an attack.
 
 ---
 
-## 15. Decentralization posture
+## 14. Decentralization posture
 
 Bopwire is **decentralized where it can be and centralized only where a public
 process would be unsafe** — and it keeps those layers separate on purpose:
