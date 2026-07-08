@@ -1,0 +1,196 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bopwire — Network Topology &amp; Decentralization</title>
+<meta name="description" content="How the Bopwire mesh forms, routes traffic, separates the money from the music, and scales — the network-architecture white paper.">
+<style>
+:root{--ink:#1a1f24;--muted:#5b6670;--line:#e2e6ea;--bg:#ffffff;--accent:#0a7d5a;--code:#f4f6f8;}
+*{box-sizing:border-box}
+body{margin:0;background:#eef1f3;color:var(--ink);
+  font:16px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+.wrap{max-width:860px;margin:0 auto;background:var(--bg);
+  padding:64px 72px;box-shadow:0 1px 40px rgba(0,0,0,.06);}
+h1{font-size:2.1rem;line-height:1.2;margin:.2em 0 .1em;letter-spacing:-.01em}
+h2{font-size:1.5rem;margin:2.2em 0 .5em;padding-top:.4em;border-top:1px solid var(--line)}
+h3{font-size:1.15rem;margin:1.8em 0 .4em}
+h4{font-size:1rem;margin:1.4em 0 .3em;color:var(--muted)}
+p{margin:.7em 0}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+em{color:var(--muted)}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+code{background:var(--code);padding:.12em .35em;border-radius:4px;
+  font:.86em/1 "Cascadia Mono",Consolas,"SFMono-Regular",Menlo,monospace}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;
+  padding:16px 18px;overflow-x:auto;margin:1.2em 0;}
+pre code{background:none;padding:0;border-radius:0;white-space:pre;
+  font-size:12px;line-height:1.32;color:#243038;
+  font-family:"Cascadia Mono",Consolas,"SFMono-Regular",Menlo,monospace}
+table{border-collapse:collapse;width:100%;margin:1.2em 0;font-size:.94rem}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#f4f6f8;font-weight:600}
+blockquote{margin:1.2em 0;padding:.6em 1.1em;border-left:3px solid var(--accent);
+  background:#f6faf8;color:var(--muted);border-radius:0 6px 6px 0}
+blockquote p{margin:.2em 0}
+blockquote strong{color:var(--ink)}
+ul,ol{margin:.6em 0;padding-left:1.4em}
+li{margin:.25em 0}
+figure.dia{margin:1.9em 0;text-align:center}
+figure.dia img,img.dia{max-width:100%;height:auto;display:inline-block;
+  border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px 12px}
+figure.dia figcaption{color:var(--muted);font-size:.85rem;margin-top:.6em}
+figure.dia figcaption b{color:var(--ink)}
+.topbar{max-width:860px;margin:0 auto;padding:14px 72px;color:var(--muted);font-size:.85rem;
+  display:flex;justify-content:space-between;align-items:center}
+.topbar a{color:var(--muted)}
+@media print{
+  body{background:#fff}
+  .wrap{box-shadow:none;max-width:none;padding:0 8px}
+  .topbar{display:none}
+  pre code{font-size:10.5px;line-height:1.3}
+  pre,table,blockquote,figure.dia{break-inside:avoid}
+  h2,h3{break-after:avoid}
+}
+@media(max-width:680px){.wrap{padding:36px 22px}.topbar{padding:12px 22px}}
+</style></head>
+<body>
+<div class="topbar"><span>Bopwire — Network Topology &amp; Decentralization</span>
+<span><a href="whitepaper.html">Technical white paper</a> · <a href="index.html">Home</a></span></div>
+<main class="wrap"><h1>Bopwire — Network Topology &amp; Decentralization</h1>
+<p><em>How the mesh forms, routes traffic, separates the money from the music, and scales. A companion to the <a href="whitepaper.html">technical white paper</a> that zooms in on the network architecture. This is a technical description of how the system works — not financial advice, and no claim about the monetary value of any token; the token is the network&#x27;s internal accounting and reward unit.</em></p>
+
+<blockquote><p><strong>Abstract.</strong> Bopwire is a peer-to-peer music network that rewards artists and the peers who seed their music, not listeners. It splits cleanly into a <em>control plane</em> — a lightweight blockchain of song fingerprints, play proofs, and balances replicated across full nodes — and a <em>data plane</em> — the audio itself, which never touches a full node and instead streams directly between listeners over an encrypted swarm. This paper describes the four node roles and how they interconnect, the discovery and NAT-traversal machinery that lets a phone behind carrier-grade NAT still reach the mesh, the bitcoin-style block propagation and vote-free consensus that keep every node byte-identical, the multi-source swarm that moves the bytes, the three-party corroboration that pays seeders per delivered byte, and the caching and horizontal-scaling levers that let the system grow from one VPS to many.</p></blockquote>
+
+<hr/>
+<p><strong>Contents</strong></p>
+<ol>
+<li>Introduction &amp; design goals</li>
+<li>Node roles &amp; topology</li>
+<li>Peer discovery &amp; bootstrap</li>
+<li>NAT traversal &amp; traffic routing</li>
+<li>The ledger — block production, propagation &amp; consensus</li>
+<li>Content distribution — the swarm</li>
+<li>Incentive layer — routing the rewards</li>
+<li>Deterministic discovery &amp; cross-node corroboration</li>
+<li>How it scales</li>
+<li>Conclusion</li>
+</ol>
+<hr/>
+
+<h2>1. Introduction &amp; design goals</h2>
+<p>Bopwire is a peer-to-peer music network with an unusual economic hook: it pays <strong>artists and the peers who seed their music</strong>, and specifically over-rewards artists with fewer than 10,000 plays, while listeners earn nothing for merely listening. Getting that incentive right — without a central server that could quietly censor, deplatform, or skim — is the reason the system is built the way it is.</p>
+<p>The architecture follows four principles:</p>
+<ul>
+<li><strong>Separate the money from the music.</strong> A song&#x27;s identity, ownership, play counts, and reward balances live on a replicated ledger (the <em>control plane</em>). The audio bytes never touch that ledger — they move directly between listeners over an encrypted swarm (the <em>data plane</em>). A full node can prove who is owed what without ever holding a copyrighted byte.</li>
+<li><strong>Determinism over trust.</strong> Every honest full node re-derives the same chain state, the same play weights, and even the same curated Discover feed from the same inputs. Agreement needs no voting and no signing authority — nodes cross-check by comparing hashes.</li>
+<li><strong>Reach every peer.</strong> Most listeners are phones behind carrier-grade NAT. The network prefers direct connections but falls back to relaying through a public <em>mini-node</em> so a firewalled peer is never unreachable.</li>
+<li><strong>Scale by adding relays, not by centralizing.</strong> Throughput grows by adding stateless mini-nodes and cache-only gateways; the consensus core has no single writer to become a bottleneck.</li>
+</ul>
+<blockquote><p><strong>The core split.</strong> If you remember one thing: <strong>fingerprints, metadata, play proofs, and balances are on-chain and replicated; audio is off-chain and peer-to-peer.</strong> Everything else in this paper follows from that division.</p></blockquote>
+
+<h2>2. Node roles &amp; topology</h2>
+<p>Four kinds of participant make up the mesh, each doing one job well. A single device can play several roles at once — a phone is a listener, a seeder, and a wallet simultaneously.</p>
+<table><thead><tr><th>Role</th><th>Runs</th><th>Holds</th></tr></thead><tbody>
+<tr><td><strong>Full node</strong></td><td>chain + verb API (<code>rats_api</code>), block producer (<code>CandidateManager</code>), block propagator, deep auditor, reward sweeper, deterministic curator</td><td>the full ledger in LevelDB — <strong>never</strong> audio</td></tr>
+<tr><td><strong>Mini-node</strong> (VPS relay)</td><td><code>relay.forward</code>, chat, the delivery broker, load reporting</td><td>nothing durable — a stateless relay</td></tr>
+<tr><td><strong>Web gateway</strong></td><td>an HTTPS/JSON facade behind Caddy that bridges browsers (which can&#x27;t speak the P2P protocol) to the mesh, and streams audio pulled from the swarm</td><td>short-lived caches only</td></tr>
+<tr><td><strong>Player</strong></td><td>the app: local fingerprinting, streaming, seeding, wallet</td><td>the user&#x27;s own audio files</td></tr>
+</tbody></table>
+<figure class="dia"><img loading="lazy" src="nt-topology.svg" alt="Network topology — a mesh of full nodes above mini-node relays and a web gateway, above player and browser leaves">
+<figcaption><b>Figure 1.</b> The four roles and how they interconnect. Blue links carry block gossip between full nodes; grey dashed links are control-plane RPCs (often relayed through a mini-node); green links carry audio directly between peers.</figcaption></figure>
+<p>Full nodes form a flat mesh — there is no leader and no hierarchy among them. They discover each other through a distributed hash table (DHT) and gossip blocks peer-to-peer. Mini-nodes and gateways are edge infrastructure: they help players reach the mesh and help browsers reach the swarm, but they hold no authority. Players are the leaves — and, crucially, they are also the <em>only</em> place the audio lives.</p>
+<figure class="dia"><img loading="lazy" src="nt-planes.svg" alt="Control plane versus data plane — replicated fingerprints, metadata, play proofs and balances above off-chain audio bytes, swarm and piece manifests">
+<figcaption><b>Figure 2.</b> Control plane vs data plane. The on-chain fingerprint (a hash of the song&#x27;s chromaprint) is the single link between a ledger entry and the bytes seeded off-chain.</figcaption></figure>
+<blockquote><p><strong>Why full nodes hold no audio.</strong> Because a full node never stores or serves copyrighted bytes, it is cheap to run, legally defensible, and impossible to turn into a honeypot. It only ever sees fingerprints and metadata — enough to run the economy, not enough to be the pirate.</p></blockquote>
+
+<h2>3. Peer discovery &amp; bootstrap</h2>
+<p>The transport is <strong>librats</strong> — a compact peer-to-peer stack providing a Kademlia-style DHT, gossip, NAT traversal (ICE), and Noise-encrypted TCP links. Every hop on the network is encrypted end to end; there is no plaintext on the wire.</p>
+<figure class="dia"><img loading="lazy" src="nt-bootstrap.svg" alt="Bootstrap sequence — a player joins the DHT, finds peers, picks a relay, binds its wallet, then relays verbs to a full node">
+<figcaption><b>Figure 3.</b> Bootstrap sequence for a fresh player. Discovery (blue) locates peers; a load-aware relay is chosen (grey); the wallet is bound to a live peer id (green); from then on every verb is relayed onward to a full node.</figcaption></figure>
+<p>A cold player joins the mesh in six steps:</p>
+<ul>
+<li><strong>DHT join.</strong> The player announces and searches under a well-known rendezvous key (<code>dht_bootstrap_hash</code>) to find live infrastructure.</li>
+<li><strong>Route selection.</strong> <code>routes.get</code> returns reachable relays; the player prefers the least-loaded mini-node (see §9).</li>
+<li><strong>Identity binding.</strong> <code>mini.hello</code> announces the player&#x27;s wallet to the relay, and a periodically re-signed <code>presence.hello</code> binds <em>wallet ⇄ live peer id</em> so the network knows which songs a currently-online peer can actually serve.</li>
+<li><strong>Relayed verbs.</strong> Once a relay is chosen, every request — <code>songs.list</code>, <code>collections.list</code>, <code>wallet.balance</code>, play sessions — is wrapped in <code>relay.forward</code> and carried to a full node.</li>
+</ul>
+<blockquote><p><strong>Signed presence, not trusted presence.</strong> Discovery trusts only the timestamp of a wallet&#x27;s last <em>valid signed</em> presence beacon. A peer is discoverable for a bounded window after each beacon (the app re-signs every ~30&nbsp;s), and a replayed beacon is rejected by a skew check plus per-wallet monotonicity. A departed peer simply falls out of discovery — no unauthenticated &quot;peer offline&quot; message can evict it early, and no captured beacon can keep it alive.</p></blockquote>
+
+<h2>4. NAT traversal &amp; traffic routing</h2>
+<p>The network is <strong>direct-first, relay-when-necessary</strong>. Two peers try to connect straight to each other; only if NAT or a firewall blocks that path does traffic detour through a public mini-node.</p>
+<figure class="dia"><img loading="lazy" src="nt-routing.svg" alt="Routing — two players attempt a direct connection, falling back to a VPS mini-node relay; a firewalled full node is reached the same way">
+<figcaption><b>Figure 4.</b> Direct vs relayed routing. Peers attempt a direct link first (dashed green). When that fails, the VPS mini-node relays the payload (grey); a firewalled full node is reached the same way for control traffic.</figcaption></figure>
+<p>A player resolves a target peer&#x27;s public address with <code>player.locate</code> and reflects its own address with <code>stun.observe</code>. It then attempts a direct <code>rats_connect</code>. If the direct dial fails — the common case for two phones on cellular — the request is wrapped in <code>relay.forward</code> and the mini-node passes it along. The relay anchor is always a mini-node (never another full node or player), because only mini-nodes run the <code>relay.forward</code> handler.</p>
+<blockquote><p><strong>The relay is a courier, not a custodian.</strong> Even when the mini-node relays audio, it is paid per <em>delivered byte</em> only when both the seeder and the listener sign for that delivery (§7). It cannot forge traffic it didn&#x27;t carry, and because it holds nothing durable, losing a mini-node costs the network capacity — never data.</p></blockquote>
+
+<h2>5. The ledger — block production, propagation &amp; consensus</h2>
+<p>The control plane is a purpose-built blockchain. A block bundles new song registrations (a <code>SongSection</code> with its fingerprint and metadata), <strong>play proofs</strong>, and transactions — token transfers, username claims, relay-reward mints, and moderation actions.</p>
+<h3>Block propagation</h3>
+<p>Full nodes distribute blocks bitcoin-style. On connect, two nodes exchange tips with <code>block.hello</code>; a node that is behind sends a <code>block.getblocks</code> locator, receives a <code>block.inv</code> inventory of hashes, requests the ones it lacks with <code>block.getdata</code>, and receives full blocks as <code>block.data</code>. A freshly mined block is pushed to the mesh as an unsolicited <code>block.inv</code>. Because inventory carries hashes rather than full blocks, a node can pull missing blocks from several peers at once.</p>
+<figure class="dia"><img loading="lazy" src="nt-blockprop.svg" alt="Block propagation sequence — tip exchange with block.hello, then getblocks, inv, getdata, and data">
+<figcaption><b>Figure 5.</b> Block propagation: tip exchange, inventory, and pull. New blocks propagate by the same inv → getdata → data path, so no node ever pushes a block a peer already has.</figcaption></figure>
+<h3>Vote-free consensus</h3>
+<p>There is no candidate voting and no confirmation gossip (&quot;Model 1&quot;). Block production is simply <strong>build → validate → connect → announce</strong>, and every node re-derives validity deterministically on receipt. When two valid branches exist, fork choice picks the one with the greater <strong>cumulative audited-play weight</strong> (<code>tip_weight</code>); a node that sees a heavier branch calls <code>reorg_to_branch</code>, which rewinds and re-derives state along the new branch — and only keeps it if the result is genuinely heavier.</p>
+<figure class="dia"><img loading="lazy" src="nt-forkchoice.svg" alt="Fork choice — the branch with the greater accumulated play weight becomes canonical, the lighter branch is orphaned">
+<figcaption><b>Figure 6.</b> Fork choice by accumulated play weight. The heavier branch (more audited plays) becomes canonical; the lighter one is orphaned. Weight — not block count or arrival time — decides.</figcaption></figure>
+<blockquote><p><strong>Determinism is the safety net.</strong> Every node keeps derived state (balances, play counts, artist/genre indexes) that it can throw away and rebuild from the raw blocks at any time. That is what makes a reorg safe: the node replays the winning branch and arrives at the exact same state every other honest node computes.</p></blockquote>
+<h3>Keeping content honest</h3>
+<p>Because audio is off-chain, a producer could in principle register one fingerprint but seed different bytes. A background <strong>deep auditor</strong> re-derives the chromaprint of sampled content and, on a mismatch, gossips a signed forgery report. A song is dropped only once the node re-audits it as forged locally <em>or</em> K independent reporters agree — so a single malicious reporter cannot censor, and a single forger cannot hide.</p>
+
+<h2>6. Content distribution — the swarm</h2>
+<p>Audio moves entirely peer-to-peer. A player fingerprints its local files (Chromaprint), and announces to the network with <code>fingerprint.submit</code> that it holds the bytes for a given content hash. Two indexes track who has what: an in-memory <code>SwarmIndex</code> of live holders, and a wallet-keyed library store whose membership is replicated by signed <code>library.delta</code> gossip. A song appears in <code>songs.list</code> only when a currently-online, presence-bound wallet is actually holding it — so the browse surface is strictly &quot;streamable right now.&quot;</p>
+<h3>Opening a stream</h3>
+<p>To play song X, a listener sends <code>stream.open(X)</code> to a full node, which replies with the set of online holders plus a <strong>per-piece manifest</strong> (integrity hashes for every chunk). The listener then pulls chunks — directly from seeders when it can reach them, or relayed through a mini-node when it can&#x27;t. First-byte latency is one piece fetch, not a whole-file download, and each chunk is verified against the manifest as it lands.</p>
+<figure class="dia"><img loading="lazy" src="nt-swarm.svg" alt="Streaming path — the full node returns holders and a piece manifest; the listener fetches verified chunks directly or through a mini-node relay">
+<figcaption><b>Figure 7.</b> Streaming path. The full node answers with holders + a piece manifest (blue); the listener fetches verified chunks directly (green) or via a mini-node relay when no direct path exists.</figcaption></figure>
+<h3>Multi-source piece transfer</h3>
+<p>Downloads use a BitTorrent-style engine. The file is split into fixed-size pieces fetched in parallel from many sources at once — seeders named by the full node, <em>and</em> extra seeders discovered independently through the DHT (<code>SwarmRegistry</code>), so a song stays fetchable even when the VPS-mediated swarm is empty. Up to 8 workers issue wide multi-piece requests; any piece that fails its manifest hash is discarded and refetched from a different peer.</p>
+<figure class="dia"><img loading="lazy" src="nt-pieces.svg" alt="Multi-source piece fetch — pieces of one file pulled concurrently from several seeders including a DHT-discovered peer, each verified per-piece">
+<figcaption><b>Figure 8.</b> Multi-source piece fetch. Pieces of one file are pulled concurrently from several seeders — including DHT-discovered peers — and verified per-piece, so no single seeder is a bottleneck or a point of failure.</figcaption></figure>
+<blockquote><p><strong>Membership vs availability.</strong> A curated collection or an album may list a song whose seeders are momentarily offline. The network keeps it visible but <em>dims</em> it — membership is a deterministic on-chain fact, while availability is a live overlay. Dropping it would make different nodes disagree; dimming it keeps them identical.</p></blockquote>
+
+<h2>7. Incentive layer — routing the rewards</h2>
+<p>A play is a small, verified economic event. The listener&#x27;s app runs an honest session — <code>session.start</code>, periodic <code>session.heartbeat</code>, <code>session.complete</code> — and the full node validates the timeline server-side before minting anything. The mint fans out to the parties who created value:</p>
+<ul>
+<li><strong>Artist / discoverer</strong> — over-rewarded while the song is under <code>FULL_REWARD_THRESHOLD</code> (10,000 plays), which is the whole point of the network.</li>
+<li><strong>Seeder</strong> — the peer that actually served the bytes for this play.</li>
+<li><strong>Mini-node</strong> — the relay, when one carried the delivery.</li>
+</ul>
+<p>Listeners earn nothing for listening on the web; the native app is where a listener can earn by seeding.</p>
+<h3>Paying the relay for real bytes only</h3>
+<p>The tricky part is paying a relay for work it genuinely did, without letting it invent traffic. Bopwire solves this with a <strong>three-party corroboration</strong>. At <code>stream.open</code> the broker mini-node records a single-use pending-delivery row. The mini then reports the bytes it relayed (signed), the listener reports the bytes it received (signed), and the node credits the <strong>minimum of the two</strong> — you cannot be paid for bytes the listener didn&#x27;t confirm. The row is single-use, so a replayed report earns nothing.</p>
+<figure class="dia"><img loading="lazy" src="nt-reward.svg" alt="Reward triangulation — broker, seeder and listener each sign their leg; the node credits the minimum of relayed and received bytes, then sweeps to chain every five minutes">
+<figcaption><b>Figure 9.</b> Reward triangulation. The broker, the seeder, and the listener each sign their leg; the node credits min(relayed, received) bytes, then sweeps accumulated credit into an on-chain reward every five minutes.</figcaption></figure>
+<p>Credited bytes accumulate per relay and are swept into a signed on-chain <code>RelayRewardTx</code> on a five-minute cycle, with a per-transaction cap so a burst can&#x27;t emit an unmineable transaction (the remainder carries forward). Per-device attestation bounds how fast any one device can mint, so faking plays has no payoff.</p>
+<blockquote><p><strong>Why listeners can&#x27;t farm the web player.</strong> A web play mints for the artist, seeder, and relay — never the browser. There is nothing to farm by faking web plays, which is why the web path needs no heavy anti-abuse machinery; the real controls live on the native, earning path.</p></blockquote>
+
+<h2>8. Deterministic discovery &amp; cross-node corroboration</h2>
+<p>The Discover feed — Rising, Top 50, New Releases, per-genre and per-year rows — is not served from a central recommender. Each full node <strong>computes it deterministically</strong> from on-chain data once per epoch. Every honest node at the same epoch produces a byte-identical result.</p>
+<figure class="dia"><img loading="lazy" src="nt-curation.svg" alt="Deterministic curation — two full nodes independently scan the same buried snapshot and emit the same collections and the same content digest">
+<figcaption><b>Figure 10.</b> Deterministic curation. Two nodes independently scan the same buried snapshot and emit the same collections and the same content digest — corroboration without any signing authority.</figcaption></figure>
+<p>The generator uses on-chain fields only (play counts, first-play block, genre, year), sorts with content-hash byte-order tie-breaks, and snapshots at a <em>buried</em> epoch boundary rather than the live tip — so a shallow reorg near the tip can&#x27;t churn the feed. It serializes the result canonically into a <code>content_digest</code> (a sha256). A client can fetch the feed from two independent nodes and compare epoch, snapshot hash, and digest: if they match, the feed is corroborated with <strong>no signing and no trust anchor</strong>. The determinism is deliberate — any use of live wall clocks, floating-point sort keys, or hash-map iteration order would break byte-identity, so none are used.</p>
+<blockquote><p><strong>Cross-checking replaces trust.</strong> The same idea recurs throughout Bopwire: rather than trust a signer, a client asks several nodes for the same deterministic answer and compares hashes. Agreement is the proof.</p></blockquote>
+
+<h2>9. How it scales</h2>
+<p>Bopwire scales along three independent axes, none of which centralizes control.</p>
+<figure class="dia"><img loading="lazy" src="nt-scaling.svg" alt="Horizontal scaling — many stateless mini-nodes fan in to a full node, players pick the least-loaded relay, and a gateway pool absorbs browser load">
+<figcaption><b>Figure 11.</b> Horizontal scaling. Relay capacity grows by adding stateless mini-nodes (players fan in to the least-loaded one); browser capacity grows by adding cache-only gateways; the chain has no single writer to saturate.</figcaption></figure>
+<ul>
+<li><strong>Relay capacity → add mini-nodes.</strong> Mini-nodes are stateless, so you can run many. Players pick the least-loaded one via load reporting, spreading fan-in. A full node protects itself with a bounded RPC worker pool that sheds the oldest queued request under flood, an on-connect handshake debounce, and a cached anti-entropy summary so a reconnect storm can&#x27;t amplify into full-library walks.</li>
+<li><strong>Browser capacity → add gateways.</strong> Gateways are pure caches in front of the mesh: a short-TTL catalog cache, a per-epoch collections cache, and a reused open-stream store that de-dupes a browser&#x27;s range requests. Gateways hold no authority, so they scale like any stateless web tier.</li>
+<li><strong>Ledger throughput → determinism, not sharding.</strong> Because every node re-derives state and there is no global writer lock or voting round, adding full nodes adds resilience and read capacity without a coordination bottleneck. Expensive jobs — curation, deep audit, reward sweeps — run off the hot path on their own cadences.</li>
+</ul>
+<table><thead><tr><th>Pressure</th><th>Lever</th><th>Mechanism</th></tr></thead><tbody>
+<tr><td>Relay fan-in</td><td>more mini-nodes</td><td>stateless relays + load-aware selection</td></tr>
+<tr><td>RPC flood</td><td>backpressure</td><td>bounded worker queue, drop-oldest</td></tr>
+<tr><td>Reconnect storms</td><td>debounce + cache</td><td>per-device handshake debounce, cached db2 summary</td></tr>
+<tr><td>Browser traffic</td><td>more gateways</td><td>TTL catalog/collections caches, shared stream store</td></tr>
+<tr><td>Catalog growth</td><td>server-side paging</td><td>filtered/sorted slices — the full list never ships</td></tr>
+<tr><td>Discover cost</td><td>epoch batching</td><td>O(N) scan once per epoch, off the hot path</td></tr>
+</tbody></table>
+<blockquote><p><strong>The honest bottleneck.</strong> Today a small deployment leans on a single VPS relay for fan-in. That is a capacity ceiling, not a trust or safety one — the design already supports many mini-nodes and gateways, so scaling out is an operational step, not an architectural change.</p></blockquote>
+
+<h2>10. Conclusion</h2>
+<p>Bopwire&#x27;s topology is a deliberate division of labor: a replicated, audio-free ledger that runs the economy; a peer-to-peer swarm that moves the music; a thin layer of stateless relays and caches that make both reachable from a phone or a browser. Decentralization is enforced not by consensus theater but by <strong>determinism and cross-checking</strong> — every honest node computes the same chain state, the same reward math, and the same Discover feed, and clients confirm by comparing hashes rather than trusting a signer.</p>
+<p>Traffic routes direct-first and relays only when NAT forces it; rewards route to the artists and seeders who create value, proven by three-party signatures rather than asserted by a server; and the whole system scales outward by adding stateless edges, because the core was designed never to need a central one.</p>
+<p>For the economics, security model, and governance that sit on top of this topology, see the <a href="whitepaper.html">main technical white paper</a>.</p>
+</main></body></html>

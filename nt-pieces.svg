@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 280" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <style>.t{font-size:13px;font-weight:700}.s{fill:#5b6670;font-size:11px}.h{font-size:13px;font-weight:700;fill:#12323b}</style>
+  <defs>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15b07e"/></marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3b7ea1"/></marker>
+    <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c98a1a"/></marker>
+  </defs>
+  <text class="h" x="40" y="38">File X — split into fixed-size pieces, fetched in parallel from many seeders</text>
+  <g>
+    <rect x="40"  y="60" width="78" height="46" rx="8" fill="none" stroke="#15b07e" stroke-width="1.6"/><text class="t" x="79"  y="88" text-anchor="middle" fill="#0a7d5a">#0</text>
+    <rect x="130" y="60" width="78" height="46" rx="8" fill="none" stroke="#3b7ea1" stroke-width="1.6"/><text class="t" x="169" y="88" text-anchor="middle" fill="#295a74">#1</text>
+    <rect x="220" y="60" width="78" height="46" rx="8" fill="none" stroke="#c98a1a" stroke-width="1.6"/><text class="t" x="259" y="88" text-anchor="middle" fill="#a06c12">#2</text>
+    <rect x="310" y="60" width="78" height="46" rx="8" fill="none" stroke="#15b07e" stroke-width="1.6"/><text class="t" x="349" y="88" text-anchor="middle" fill="#0a7d5a">#3</text>
+    <rect x="400" y="60" width="78" height="46" rx="8" fill="none" stroke="#3b7ea1" stroke-width="1.6"/><text class="t" x="439" y="88" text-anchor="middle" fill="#295a74">#4</text>
+    <rect x="490" y="60" width="78" height="46" rx="8" fill="none" stroke="#15b07e" stroke-width="1.6"/><text class="t" x="529" y="88" text-anchor="middle" fill="#0a7d5a">#5</text>
+    <rect x="580" y="60" width="78" height="46" rx="8" fill="none" stroke="#c98a1a" stroke-width="1.6"/><text class="t" x="619" y="88" text-anchor="middle" fill="#a06c12">#6</text>
+    <rect x="670" y="60" width="78" height="46" rx="8" fill="none" stroke="#3b7ea1" stroke-width="1.6"/><text class="t" x="709" y="88" text-anchor="middle" fill="#295a74">#7</text>
+  </g>
+  <g>
+    <rect x="40"  y="168" width="150" height="54" rx="12" fill="#e7f7f0" stroke="#0a7d5a" stroke-width="1.5"/><text class="t" x="115" y="192" text-anchor="middle" fill="#0a7d5a">Seeder A</text><text class="s" x="115" y="210" text-anchor="middle">window = 1 piece</text>
+    <rect x="250" y="168" width="150" height="54" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/><text class="t" x="325" y="199" text-anchor="middle" fill="#295a74">Seeder B</text>
+    <rect x="460" y="168" width="170" height="54" rx="12" fill="#faf4e6" stroke="#c98a1a" stroke-width="1.5"/><text class="t" x="545" y="192" text-anchor="middle" fill="#a06c12">DHT peer</text><text class="s" x="545" y="210" text-anchor="middle">found via SwarmRegistry</text>
+  </g>
+  <path d="M115,168 L79,106" stroke="#15b07e" stroke-width="1.6" marker-end="url(#ag)"/>
+  <path d="M325,168 L169,106" stroke="#3b7ea1" stroke-width="1.6" marker-end="url(#ab)"/>
+  <path d="M545,168 L259,106" stroke="#c98a1a" stroke-width="1.6" marker-end="url(#am)"/>
+  <text class="s" x="390" y="262" text-anchor="middle">up to 8 workers × 16-piece requests; a corrupt piece is dropped and refetched from another source</text>
+</svg>

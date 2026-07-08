@@ -20,7 +20,7 @@ a:hover{text-decoration:underline}
 
 /* hero */
 .hero{background:radial-gradient(1200px 500px at 70% -10%,#16323b 0%,var(--dark) 55%);
-  color:#eef3f2;padding:96px 24px 84px;text-align:center;position:relative;overflow:hidden}
+  color:#eef3f2;padding:96px 24px 84px;text-align:center;position:relative}
 .hero .tag{display:inline-block;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
   color:#7fe9c4;border:1px solid #1f4a44;border-radius:999px;padding:6px 14px;margin-bottom:26px}
 .hero h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.05;letter-spacing:-.02em;font-weight:800}
@@ -32,6 +32,27 @@ a:hover{text-decoration:underline}
 .btn:hover{text-decoration:none;transform:translateY(-1px)}
 .btn-primary{background:var(--accent);color:#06231a}
 .btn-ghost{background:transparent;color:#dbe7e4;border:1px solid #2a4a48}
+
+/* white-paper dropdown (holds multiple papers) */
+.papers{position:relative;display:inline-block}
+.papers>summary{list-style:none;cursor:pointer}
+.papers>summary::-webkit-details-marker{display:none}
+.papers>summary::marker{content:""}
+.papers .caret{transition:transform .15s ease;font-size:.7em;opacity:.8}
+.papers[open] .caret{transform:rotate(180deg)}
+.papers-menu{position:absolute;top:calc(100% + 8px);left:0;z-index:30;min-width:320px;
+  background:#fff;border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 16px 48px rgba(10,40,30,.22);padding:8px;text-align:left}
+.papers-menu .hd{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;padding:8px 12px 5px}
+.papers-menu a{display:block;padding:11px 12px;border-radius:9px;color:var(--ink)}
+.papers-menu a:hover{background:#eef7f3;text-decoration:none}
+.papers-menu a strong{display:block;font-size:.96rem;color:var(--ink)}
+.papers-menu a span{display:block;font-size:.82rem;color:var(--muted);margin-top:2px;line-height:1.4}
+/* light context (paper band / footer) */
+.paper .papers-menu a:hover,footer .papers-menu a:hover{background:#eef7f3}
+/* the hero must let the menu overflow its clipped box */
+.papers[open]{z-index:30}
 
 /* sections */
 section{padding:74px 24px}
@@ -92,7 +113,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
   <p class="sub">Bopwire is a peer-to-peer music network where the people listening also deliver the audio, content is recognized by how it <em>sounds</em>, and every genuine play pays the artist, the seeder, and the relay — settled on a purpose-built blockchain.</p>
   <div class="cta">
     <a class="btn btn-primary" href="player/">▶ Open the web player</a>
-    <a class="btn btn-ghost" href="whitepaper.html">Read the white paper →</a>
+    <details class="papers">
+      <summary class="btn btn-ghost">Read the white papers <span class="caret">▾</span></summary>
+      <div class="papers-menu">
+        <div class="hd">Technical white papers</div>
+        <a href="whitepaper.html"><strong>Technical white paper</strong><span>The full system — mechanisms, transfer layer, chain, economics, security &amp; governance.</span></a>
+        <a href="whitepaper-network.html"><strong>Network Topology &amp; Decentralization</strong><span>How the mesh forms, routes traffic, and scales — with diagrams.</span></a>
+      </div>
+    </details>
     <a class="btn btn-ghost" href="https://github.com/knobcore/bopwire">View on GitHub</a>
   </div>
 </header>
@@ -154,11 +182,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
   <div class="wrap">
     <div>
       <span class="eyebrow" style="color:#7fe9c4">Documentation</span>
-      <h2>The technical white paper</h2>
-      <p>Network topology, the end-to-end data-propagation flow, the transfer layer, the chain &amp; play lifecycle, tokenomics, the security model, and the real bandwidth/scaling math — written for non-developers without dumbing it down for engineers.</p>
+      <h2>The technical white papers</h2>
+      <p>Two papers, one design language. The <strong>technical white paper</strong> covers the whole system — the transfer layer, the chain &amp; play lifecycle, tokenomics, security, and governance. The <strong>network topology</strong> paper zooms in on how the mesh forms, routes traffic, reaches decentralization, and scales — with diagrams throughout.</p>
     </div>
     <div class="links">
-      <a class="btn btn-primary" href="whitepaper.html">Read online</a>
+      <a class="btn btn-primary" href="whitepaper.html">Technical white paper →</a>
+      <a class="btn btn-ghost" href="whitepaper-network.html" style="color:#dbe7e4;border-color:#2a4a48">Network topology &amp; decentralization →</a>
     </div>
   </div>
 </section>
@@ -178,7 +207,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 <footer>
   <div class="wrap">
     <div><strong>Bopwire</strong> · open-source · <a href="https://github.com/knobcore/bopwire">github.com/knobcore/bopwire</a></div>
-    <div><a href="whitepaper.html">White paper</a></div>
+    <div class="foot-papers"><span style="color:#90999f">White papers:</span>
+      <a href="whitepaper.html">Technical</a> · <a href="whitepaper-network.html">Network topology</a></div>
   </div>
   <div class="wrap"><p class="disclaimer">This site describes how the system works. It is a technical description, not financial advice, and makes no claim about the monetary value of any token; the token is described purely as the network’s internal accounting and reward unit. Not an offer, solicitation, or financial instrument.</p></div>
 </footer>

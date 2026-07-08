@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <style>
+    .t{fill:#12323b;font-size:14px;font-weight:700}
+    .s{fill:#5b6670;font-size:11.5px}
+    .lbl{font-size:11px;font-weight:600}
+    .reg{fill:none;stroke-dasharray:3 5;stroke-width:1.2;opacity:.55}
+    .regt{font-size:11px;font-weight:700;letter-spacing:.06em}
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b6670"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15b07e"/></marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3b7ea1"/></marker>
+  </defs>
+
+  <!-- consensus mesh region -->
+  <rect class="reg" x="20" y="18" width="760" height="112" rx="14" stroke="#3b7ea1"/>
+  <text class="regt" x="34" y="38" fill="#3b7ea1">CONSENSUS MESH · FULL NODES</text>
+
+  <g>
+    <rect x="70" y="50" width="170" height="66" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/>
+    <text class="t" x="155" y="76" text-anchor="middle" fill="#295a74">⛓ Full node</text>
+    <text class="s" x="155" y="94" text-anchor="middle">chain (leveldb), verbs,</text>
+    <text class="s" x="155" y="109" text-anchor="middle">block producer — no audio</text>
+  </g>
+  <g>
+    <rect x="315" y="50" width="170" height="66" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/>
+    <text class="t" x="400" y="76" text-anchor="middle" fill="#295a74">⛓ Full node</text>
+    <text class="s" x="400" y="94" text-anchor="middle">re-derives every block</text>
+    <text class="s" x="400" y="109" text-anchor="middle">deterministically</text>
+  </g>
+  <g>
+    <rect x="560" y="50" width="170" height="66" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/>
+    <text class="t" x="645" y="76" text-anchor="middle" fill="#295a74">⛓ Full node</text>
+    <text class="s" x="645" y="94" text-anchor="middle">DHT rendezvous under</text>
+    <text class="s" x="645" y="109" text-anchor="middle">dht_bootstrap_hash</text>
+  </g>
+  <path d="M240,74 L315,74" stroke="#3b7ea1" stroke-width="1.6" marker-start="url(#ab)" marker-end="url(#ab)"/>
+  <path d="M485,74 L560,74" stroke="#3b7ea1" stroke-width="1.6" marker-start="url(#ab)" marker-end="url(#ab)"/>
+  <path d="M150,116 Q400,150 650,116" fill="none" stroke="#3b7ea1" stroke-width="1.6" marker-start="url(#ab)" marker-end="url(#ab)"/>
+  <text class="lbl" x="400" y="150" text-anchor="middle" fill="#3b7ea1">block.inv gossip</text>
+
+  <!-- edge tier -->
+  <g>
+    <rect x="95" y="200" width="200" height="66" rx="12" fill="#e7f7f0" stroke="#0a7d5a" stroke-width="1.5"/>
+    <text class="t" x="195" y="226" text-anchor="middle" fill="#0a7d5a">🛰 Mini-node (VPS relay)</text>
+    <text class="s" x="195" y="244" text-anchor="middle">relay.forward, chat,</text>
+    <text class="s" x="195" y="259" text-anchor="middle">delivery broker — stateless</text>
+  </g>
+  <g>
+    <rect x="505" y="200" width="200" height="66" rx="12" fill="#f6f9f8" stroke="#cfd8dd" stroke-width="1.5"/>
+    <text class="t" x="605" y="226" text-anchor="middle">🌐 Web gateway</text>
+    <text class="s" x="605" y="244" text-anchor="middle">HTTPS↔librats bridge,</text>
+    <text class="s" x="605" y="259" text-anchor="middle">catalog + stream cache</text>
+  </g>
+  <path d="M195,200 L230,116" stroke="#5b6670" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <text class="lbl" x="165" y="165" fill="#5b6670">RPC relay</text>
+  <path d="M605,200 L560,116" stroke="#5b6670" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <path d="M295,233 L505,233" stroke="#5b6670" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <text class="lbl" x="400" y="227" text-anchor="middle" fill="#5b6670">verbs</text>
+
+  <!-- leaves -->
+  <g>
+    <rect x="40" y="330" width="150" height="74" rx="12" fill="#fff" stroke="#cfd8dd" stroke-width="1.5"/>
+    <text class="t" x="115" y="356" text-anchor="middle">📱 Player</text>
+    <text class="s" x="115" y="374" text-anchor="middle">holds audio files,</text>
+    <text class="s" x="115" y="389" text-anchor="middle">seeds the swarm</text>
+  </g>
+  <g>
+    <rect x="215" y="330" width="150" height="74" rx="12" fill="#fff" stroke="#cfd8dd" stroke-width="1.5"/>
+    <text class="t" x="290" y="356" text-anchor="middle">💻 Player</text>
+    <text class="s" x="290" y="374" text-anchor="middle">fingerprints locally,</text>
+    <text class="s" x="290" y="389" text-anchor="middle">streams P2P</text>
+  </g>
+  <g>
+    <rect x="420" y="330" width="150" height="74" rx="12" fill="#fff" stroke="#cfd8dd" stroke-width="1.5"/>
+    <text class="t" x="495" y="356" text-anchor="middle">📱 Player</text>
+    <text class="s" x="495" y="374" text-anchor="middle">presence.hello binds</text>
+    <text class="s" x="495" y="389" text-anchor="middle">wallet ⇄ peer</text>
+  </g>
+  <g>
+    <rect x="615" y="330" width="150" height="74" rx="12" fill="#f6f9f8" stroke="#cfd8dd" stroke-width="1.5"/>
+    <text class="t" x="690" y="356" text-anchor="middle">🖥 Browser</text>
+    <text class="s" x="690" y="374" text-anchor="middle">no librats — talks</text>
+    <text class="s" x="690" y="389" text-anchor="middle">only to the gateway</text>
+  </g>
+
+  <path d="M115,330 L175,266" stroke="#5b6670" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <path d="M290,330 L210,266" stroke="#5b6670" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <text class="lbl" x="320" y="300" fill="#5b6670">stream.open</text>
+  <path d="M470,330 L235,266" stroke="#5b6670" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <path d="M190,367 L215,367" stroke="#15b07e" stroke-width="1.8" marker-start="url(#ag)" marker-end="url(#ag)"/>
+  <path d="M365,385 L420,385" stroke="#15b07e" stroke-width="1.8" marker-start="url(#ag)" marker-end="url(#ag)"/>
+  <text class="lbl" x="392" y="403" text-anchor="middle" fill="#15b07e">audio bytes</text>
+  <path d="M690,330 L640,266" stroke="#15b07e" stroke-width="1.8" marker-end="url(#ag)"/>
+  <text class="lbl" x="700" y="300" fill="#15b07e">HTTPS</text>
+
+  <!-- legend -->
+  <g transform="translate(40,435)">
+    <line x1="0" y1="0" x2="26" y2="0" stroke="#15b07e" stroke-width="2"/>
+    <text class="s" x="32" y="4">audio — data plane</text>
+    <line x1="185" y1="0" x2="211" y2="0" stroke="#5b6670" stroke-width="2" stroke-dasharray="5 4"/>
+    <text class="s" x="217" y="4">RPC — control plane</text>
+    <line x1="375" y1="0" x2="401" y2="0" stroke="#3b7ea1" stroke-width="2"/>
+    <text class="s" x="407" y="4">block gossip</text>
+  </g>
+</svg>

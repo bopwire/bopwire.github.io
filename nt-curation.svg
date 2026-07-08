@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <style>.t{font-size:13px;font-weight:700}.s{fill:#5b6670;font-size:11px}.lbl{font-size:11px;font-weight:600}</style>
+  <defs>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3b7ea1"/></marker>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b6670"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15b07e"/></marker>
+  </defs>
+  <g>
+    <rect x="30" y="110" width="175" height="72" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/>
+    <text class="t" x="117" y="138" text-anchor="middle" fill="#295a74">⛓ Full node A</text><text class="s" x="117" y="157" text-anchor="middle">scan @ epoch E</text><text class="s" x="117" y="172" text-anchor="middle">snapshot height = E·N</text>
+  </g>
+  <g>
+    <rect x="565" y="110" width="185" height="72" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/>
+    <text class="t" x="657" y="138" text-anchor="middle" fill="#295a74">⛓ Full node B</text><text class="s" x="657" y="157" text-anchor="middle">scan @ epoch E</text><text class="s" x="657" y="172" text-anchor="middle">independent compute</text>
+  </g>
+  <g>
+    <rect x="295" y="30" width="190" height="56" rx="12" fill="#e7f7f0" stroke="#0a7d5a" stroke-width="1.5"/>
+    <text class="t" x="390" y="54" text-anchor="middle" fill="#0a7d5a">CollectionSet</text><text class="s" x="390" y="72" text-anchor="middle">Rising / Top / New / genre / year</text>
+  </g>
+  <g>
+    <rect x="295" y="205" width="190" height="56" rx="12" fill="#f6f9f8" stroke="#cfd8dd" stroke-width="1.5"/>
+    <text class="t" x="390" y="229" text-anchor="middle">content_digest</text><text class="s" x="390" y="247" text-anchor="middle">sha256 of canonical bytes</text>
+  </g>
+  <path d="M205,130 L295,70" stroke="#3b7ea1" stroke-width="1.6" marker-end="url(#ab)"/>
+  <path d="M565,130 L485,70" stroke="#3b7ea1" stroke-width="1.6" marker-end="url(#ab)"/>
+  <path d="M295,150 L205,162" stroke="#5b6670" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <path d="M485,162 L565,150" stroke="#5b6670" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <path d="M390,86 L390,205" stroke="#15b07e" stroke-width="1.8" marker-end="url(#ag)"/>
+  <text class="lbl" x="400" y="150" fill="#0a7d5a">deterministic — no clocks, no floats</text>
+  <text class="s" x="390" y="288" text-anchor="middle">equal digest across nodes ⇒ the feed is corroborated with no signing and no trust anchor</text>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 350" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <style>.t{font-size:13px;font-weight:700}.s{fill:#5b6670;font-size:11px}.lbl{font-size:11px;font-weight:600}</style>
+  <defs>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15b07e"/></marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3b7ea1"/></marker>
+    <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c98a1a"/></marker>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b6670"/></marker>
+  </defs>
+  <g>
+    <rect x="40" y="150" width="150" height="72" rx="12" fill="#fff" stroke="#cfd8dd" stroke-width="1.5"/>
+    <text class="t" x="115" y="180" text-anchor="middle">📱 Listener</text><text class="s" x="115" y="200" text-anchor="middle">signs a receipt</text>
+  </g>
+  <g>
+    <rect x="305" y="40" width="180" height="66" rx="12" fill="#e7f7f0" stroke="#0a7d5a" stroke-width="1.5"/>
+    <text class="t" x="395" y="68" text-anchor="middle" fill="#0a7d5a">🛰 Mini-node (broker)</text><text class="s" x="395" y="88" text-anchor="middle">pd: pending-delivery row</text>
+  </g>
+  <g>
+    <rect x="600" y="150" width="150" height="72" rx="12" fill="#fff" stroke="#cfd8dd" stroke-width="1.5"/>
+    <text class="t" x="675" y="180" text-anchor="middle">📱 Seeder</text><text class="s" x="675" y="200" text-anchor="middle">signs bytes relayed</text>
+  </g>
+  <g>
+    <rect x="305" y="255" width="180" height="62" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/>
+    <text class="t" x="395" y="283" text-anchor="middle" fill="#295a74">⛓ Full node</text><text class="s" x="395" y="301" text-anchor="middle">RelayRewardTx → ledger</text>
+  </g>
+
+  <path d="M190,158 L305,84" stroke="#5b6670" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <text class="lbl" x="210" y="120" fill="#5b6670">① stream.open</text>
+  <path d="M600,160 L490,92" stroke="#c98a1a" stroke-width="1.6" marker-end="url(#am)"/>
+  <text class="lbl" x="560" y="128" fill="#a06c12">② relay.report (signed)</text>
+  <path d="M190,175 L305,96" stroke="#c98a1a" stroke-width="1.6" marker-end="url(#am)"/>
+  <text class="lbl" x="205" y="150" fill="#a06c12">③ relay.receipt (signed)</text>
+  <path d="M395,106 L395,255" stroke="#15b07e" stroke-width="1.8" marker-end="url(#ag)"/>
+  <text class="lbl" x="405" y="185" fill="#0a7d5a">④ credit min(relayed, received) bytes</text>
+  <path d="M395,317 L190,222" stroke="#3b7ea1" stroke-width="1.6" marker-end="url(#ab)"/>
+  <text class="lbl" x="230" y="290" fill="#3b7ea1">⑤ 5-min sweep → on-chain reward</text>
+
+  <text class="s" x="390" y="340" text-anchor="middle">single-use pd: row ⇒ replay-proof; the relay is paid only for bytes both it and the listener attest to</text>
+</svg>

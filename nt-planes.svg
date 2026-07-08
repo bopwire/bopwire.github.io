@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <style>
+    .t{font-size:13.5px;font-weight:700}.s{fill:#5b6670;font-size:11px}
+    .regt{font-size:11px;font-weight:700;letter-spacing:.06em}
+  </style>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b6670"/></marker></defs>
+
+  <rect x="20" y="20" width="740" height="108" rx="14" fill="none" stroke="#3b7ea1" stroke-dasharray="3 5" stroke-width="1.2" opacity=".55"/>
+  <text class="regt" x="34" y="40" fill="#3b7ea1">CONTROL PLANE · REPLICATED, CONSENSUS-CHECKED</text>
+  <g fill="#e8f0f6">
+    <rect x="45" y="52" width="150" height="60" rx="12" stroke="#3b7ea1" stroke-width="1.5"/>
+    <rect x="215" y="52" width="150" height="60" rx="12" stroke="#3b7ea1" stroke-width="1.5"/>
+    <rect x="385" y="52" width="150" height="60" rx="12" stroke="#3b7ea1" stroke-width="1.5"/>
+    <rect x="555" y="52" width="165" height="60" rx="12" stroke="#3b7ea1" stroke-width="1.5"/>
+  </g>
+  <g text-anchor="middle" fill="#295a74"><text class="t" x="120" y="80">Fingerprints</text><text class="t" x="290" y="80">Metadata</text><text class="t" x="460" y="80">Play proofs</text><text class="t" x="637" y="80">Balances + rewards</text></g>
+  <g text-anchor="middle"><text class="s" x="120" y="98">sha256 of chromaprint</text><text class="s" x="290" y="98">title/artist/genre/year</text><text class="s" x="460" y="98">audited → block weight</text><text class="s" x="637" y="98">token ledger</text></g>
+
+  <rect x="20" y="165" width="740" height="108" rx="14" fill="none" stroke="#15b07e" stroke-dasharray="3 5" stroke-width="1.2" opacity=".55"/>
+  <text class="regt" x="34" y="185" fill="#0a7d5a">DATA PLANE · PEER-TO-PEER, OFF-CHAIN</text>
+  <g fill="#e7f7f0">
+    <rect x="45" y="197" width="200" height="60" rx="12" stroke="#0a7d5a" stroke-width="1.5"/>
+    <rect x="270" y="197" width="220" height="60" rx="12" stroke="#0a7d5a" stroke-width="1.5"/>
+    <rect x="515" y="197" width="205" height="60" rx="12" stroke="#0a7d5a" stroke-width="1.5"/>
+  </g>
+  <g text-anchor="middle" fill="#0a7d5a"><text class="t" x="145" y="225">Audio bytes</text><text class="t" x="380" y="225">Swarm of holders</text><text class="t" x="617" y="225">Piece manifests</text></g>
+  <g text-anchor="middle"><text class="s" x="145" y="243">never on a full node</text><text class="s" x="380" y="243">players seed to players</text><text class="s" x="617" y="243">per-chunk integrity hashes</text></g>
+
+  <path d="M390,128 L390,165" stroke="#5b6670" stroke-width="1.5" marker-end="url(#a)"/>
+  <text class="s" x="400" y="150" fill="#12323b" font-weight="600">the fingerprint links the two planes</text>
+</svg>

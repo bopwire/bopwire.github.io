@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <style>.t{font-size:13px;font-weight:700}.s{fill:#5b6670;font-size:11px}.lbl{font-size:11px;font-weight:600}</style>
+  <defs>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15b07e"/></marker>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b6670"/></marker>
+  </defs>
+  <g>
+    <rect x="325" y="30" width="150" height="56" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/>
+    <text class="t" x="400" y="54" text-anchor="middle" fill="#295a74">⛓ Full node</text><text class="s" x="400" y="72" text-anchor="middle">RPC worker pool</text>
+  </g>
+  <g fill="#e7f7f0" stroke="#0a7d5a" stroke-width="1.5">
+    <rect x="40"  y="160" width="150" height="58" rx="12"/><rect x="220" y="160" width="150" height="58" rx="12"/><rect x="430" y="160" width="150" height="58" rx="12"/>
+  </g>
+  <rect x="615" y="160" width="165" height="58" rx="12" fill="#f6f9f8" stroke="#cfd8dd" stroke-width="1.5"/>
+  <g text-anchor="middle" fill="#0a7d5a"><text class="t" x="115" y="194">🛰 Mini-node 1</text><text class="t" x="295" y="194">🛰 Mini-node 2</text><text class="t" x="505" y="194">🛰 Mini-node k</text></g>
+  <text class="t" x="697" y="186" text-anchor="middle">🌐 Gateway pool</text><text class="s" x="697" y="204" text-anchor="middle">8s / 30s caches</text>
+
+  <g stroke="#5b6670" stroke-width="1.5" stroke-dasharray="5 4" fill="none">
+    <path d="M115,160 L360,86" marker-end="url(#a)"/><path d="M295,160 L390,86" marker-end="url(#a)"/><path d="M505,160 L430,86" marker-end="url(#a)"/><path d="M697,160 L470,86" marker-end="url(#a)"/>
+  </g>
+  <text class="lbl" x="330" y="128" fill="#5b6670">load-balanced fan-in</text>
+
+  <g fill="#fff" stroke="#cfd8dd" stroke-width="1.5">
+    <rect x="120" y="280" width="150" height="54" rx="12"/><rect x="430" y="280" width="150" height="54" rx="12"/>
+  </g>
+  <g text-anchor="middle"><text class="t" x="195" y="304">📱 Players</text><text class="s" x="195" y="322">pick least-loaded mini</text><text class="t" x="505" y="304">📱 Players</text></g>
+  <g stroke="#15b07e" stroke-width="1.8" fill="none"><path d="M195,280 L130,218" marker-end="url(#ag)"/><path d="M230,280 L280,218" marker-end="url(#ag)"/><path d="M505,280 L505,218" marker-end="url(#ag)"/></g>
+
+  <text class="s" x="400" y="352" text-anchor="middle">add mini-nodes to widen relay capacity; add gateways for browser load; the chain stays single-writer-free</text>
+</svg>
