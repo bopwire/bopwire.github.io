@@ -25,8 +25,8 @@
   <g>
     <rect x="315" y="50" width="170" height="66" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/>
     <text class="t" x="400" y="76" text-anchor="middle" fill="#295a74">⛓ Full node</text>
-    <text class="s" x="400" y="94" text-anchor="middle">re-derives every block</text>
-    <text class="s" x="400" y="109" text-anchor="middle">deterministically</text>
+    <text class="s" x="400" y="94" text-anchor="middle">re-derives + state-root</text>
+    <text class="s" x="400" y="109" text-anchor="middle">gates every block</text>
   </g>
   <g>
     <rect x="560" y="50" width="170" height="66" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/>

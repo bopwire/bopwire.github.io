@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 360" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <style>.t{font-size:13px;font-weight:700}.s{fill:#5b6670;font-size:11px}.lbl{font-size:11px;font-weight:600}.mono{font-family:"Cascadia Mono",Consolas,monospace;font-size:11px}</style>
+  <defs>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3b7ea1"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15b07e"/></marker>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+  </defs>
+
+  <!-- Producer -->
+  <rect x="34" y="40" width="238" height="96" rx="12" fill="#e7f7f0" stroke="#0a7d5a" stroke-width="1.5"/>
+  <text class="t" x="153" y="66" text-anchor="middle" fill="#0a7d5a">⛓ Producer</text>
+  <text class="s" x="153" y="86" text-anchor="middle">applies the block → ledger state</text>
+  <text class="s" x="153" y="104" text-anchor="middle">LtHash(all state) → state_root SR</text>
+  <text class="mono" x="153" y="123" text-anchor="middle" fill="#295a74">stamps header.state_root = SR</text>
+
+  <!-- block travelling -->
+  <path d="M272,88 L508,88" stroke="#3b7ea1" stroke-width="1.8" marker-end="url(#ab)"/>
+  <text class="lbl" x="390" y="80" text-anchor="middle" fill="#3b7ea1">block — header commits SR + song_body_hash</text>
+
+  <!-- Validator -->
+  <rect x="508" y="40" width="238" height="96" rx="12" fill="#e8f0f6" stroke="#3b7ea1" stroke-width="1.5"/>
+  <text class="t" x="627" y="66" text-anchor="middle" fill="#295a74">Every validator</text>
+  <text class="s" x="627" y="86" text-anchor="middle">independently re-applies the block</text>
+  <text class="s" x="627" y="104" text-anchor="middle">LtHash(all state) → its own root SR′</text>
+  <text class="mono" x="627" y="123" text-anchor="middle" fill="#295a74">gate: compare SR′ vs header.SR</text>
+
+  <!-- decision split -->
+  <path d="M627,136 L627,178" stroke="#5b6670" stroke-width="1.5"/>
+  <circle cx="627" cy="184" r="5" fill="#5b6670"/>
+
+  <!-- accept -->
+  <path d="M622,190 C560,235 470,236 402,250" stroke="#15b07e" stroke-width="1.7" fill="none" marker-end="url(#ag)"/>
+  <rect x="196" y="248" width="206" height="70" rx="12" fill="#e7f7f0" stroke="#0a7d5a" stroke-width="1.5"/>
+  <text class="t" x="299" y="274" text-anchor="middle" fill="#0a7d5a">SR′ = SR → commit</text>
+  <text class="s" x="299" y="294" text-anchor="middle">state_root persisted in the same</text>
+  <text class="s" x="299" y="309" text-anchor="middle">atomic batch as the block</text>
+
+  <!-- reject -->
+  <path d="M634,190 C690,232 700,236 690,250" stroke="#c0392b" stroke-width="1.7" fill="none" marker-end="url(#ar)"/>
+  <rect x="452" y="248" width="294" height="70" rx="12" fill="#fbeceb" stroke="#c0392b" stroke-width="1.5"/>
+  <text class="t" x="599" y="274" text-anchor="middle" fill="#c0392b">SR′ ≠ SR → reject the block</text>
+  <text class="s" x="599" y="294" text-anchor="middle">any state divergence — a balance bug, a double</text>
+  <text class="s" x="599" y="309" text-anchor="middle">spend, a reordered mint — is a hard rejection</text>
+
+  <text class="s" x="390" y="346" text-anchor="middle">the producer's own block passes its own gate; a reorg re-derives and re-gates the same root, so branch adoption == linear connect</text>
+</svg>
