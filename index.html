@@ -27,6 +27,23 @@ a:hover{text-decoration:underline}
 .hero h1 .accent{background:linear-gradient(90deg,#19c98e,#7fe9c4);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero p.sub{max-width:680px;margin:22px auto 0;font-size:1.18rem;color:#aebcc0;line-height:1.55}
 .cta{margin-top:38px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* Direct-download buttons: monochrome platform glyph + a small download
+   badge overlaid at the corner. These are plain <a> tags pointed straight
+   at the binary asset on the GitHub release — GitHub serves those with
+   Content-Disposition: attachment, so the browser already starts a
+   download on click without any JS; the "download" attribute is kept only
+   as a same-origin-safe hint, since it is silently ignored cross-origin. */
+.get-app{margin-top:18px;display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
+.get-app .label{font-size:.82rem;color:#8fa2a0;letter-spacing:.04em}
+.icon-dl{position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:52px;height:52px;border-radius:12px;background:transparent;
+  border:1px solid #2a4a48;color:#dbe7e4;transition:border-color .15s ease,transform .12s ease}
+.icon-dl:hover{border-color:var(--accent);transform:translateY(-1px);text-decoration:none}
+.icon-dl svg.glyph{width:26px;height:26px;fill:currentColor}
+.icon-dl .badge{position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:50%;
+  background:var(--accent);color:#06231a;display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--dark)}
+.icon-dl .badge svg{width:11px;height:11px;fill:currentColor}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:10px;
   font-weight:600;font-size:.98rem;transition:transform .08s ease}
 .btn:hover{text-decoration:none;transform:translateY(-1px)}
@@ -122,6 +139,23 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
       </div>
     </details>
     <a class="btn btn-ghost" href="https://github.com/knobcore/bopwire">View on GitHub</a>
+  </div>
+  <div class="get-app">
+    <span class="label">Get the app:</span>
+    <a class="icon-dl" href="https://github.com/knobcore/bopwire/releases/latest/download/bopwire-linux-x86_64.AppImage"
+       download aria-label="Download for Linux (AppImage)" title="Download for Linux (AppImage)">
+      <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2.2c-1.1 0-2 .8-2.1 1.9-.6.3-1 .9-1 1.6v1.1C7.6 7.4 7 8.4 7 9.6v.6c-.9.4-1.5 1.3-1.5 2.3 0 .5.1.9.4 1.3-.6.4-1 1.1-1 1.9 0 .8.5 1.5 1.1 1.9-.1.3-.2.6-.2 1 0 1.4 1.1 2.5 2.5 2.5.3 0 .6-.1.9-.2.4.6 1.1 1.1 1.9 1.1h3.8c.8 0 1.5-.4 1.9-1.1.3.1.6.2.9.2 1.4 0 2.5-1.1 2.5-2.5 0-.4-.1-.7-.2-1 .7-.4 1.1-1.1 1.1-1.9 0-.8-.4-1.5-1-1.9.2-.4.4-.8.4-1.3 0-1-.6-1.9-1.5-2.3v-.6c0-1.2-.6-2.2-1.9-2.8V5.7c0-.7-.4-1.3-1-1.6-.1-1.1-1-1.9-2.1-1.9zm-2.3 6.1c.5 0 1 .3 1.2.8.2-.2.5-.3.8-.3s.6.1.8.3c.2-.5.7-.8 1.2-.8.8 0 1.4.6 1.4 1.4 0 .5-.2.9-.6 1.1.3.6.5 1.3.5 2 0 2-1.6 3.4-3.3 3.4s-3.3-1.4-3.3-3.4c0-.7.2-1.4.5-2-.4-.2-.6-.6-.6-1.1 0-.8.6-1.4 1.4-1.4zm.9 3.1c-.4 0-.7.4-.7.9s.3.9.7.9.7-.4.7-.9-.3-.9-.7-.9zm2.8 0c-.4 0-.7.4-.7.9s.3.9.7.9.7-.4.7-.9-.3-.9-.7-.9zm-3.6 3.2c.5.7 1.3 1.2 2.2 1.2s1.7-.5 2.2-1.2c-.4.6-1.3 1-2.2 1s-1.8-.4-2.2-1z"/>
+      </svg>
+      <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11.2l3.6-3.6L17 12l-5 5-5-5 1.4-1.4 3.6 3.6V3h1zM5 19h14v2H5v-2z"/></svg></span>
+    </a>
+    <a class="icon-dl" href="https://github.com/knobcore/bopwire/releases/latest/download/bopwire-android.apk"
+       download aria-label="Download for Android (APK)" title="Download for Android (APK)">
+      <svg class="glyph" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6.4 9.5v6.8c0 .5.4.9.9.9h.7v3.1c0 .7.6 1.3 1.3 1.3s1.3-.6 1.3-1.3v-3.1h2.8v3.1c0 .7.6 1.3 1.3 1.3s1.3-.6 1.3-1.3v-3.1h.7c.5 0 .9-.4.9-.9V9.5H6.4zm-2.1 0c-.6 0-1.1.5-1.1 1.1v4.9c0 .6.5 1.1 1.1 1.1s1.1-.5 1.1-1.1v-4.9c0-.6-.5-1.1-1.1-1.1zm15.4 0c-.6 0-1.1.5-1.1 1.1v4.9c0 .6.5 1.1 1.1 1.1s1.1-.5 1.1-1.1v-4.9c0-.6-.5-1.1-1.1-1.1zM8.1 4.6l-1-1.7c-.1-.2 0-.4.2-.5.2-.1.4 0 .5.2l1 1.8c.7-.3 1.4-.4 2.2-.4s1.5.1 2.2.4l1-1.8c.1-.2.3-.3.5-.2.2.1.3.3.2.5l-1 1.7c1.7.9 2.9 2.5 3.1 4.4H5c.2-1.9 1.4-3.5 3.1-4.4zM9 7c.4 0 .7-.3.7-.7S9.4 5.6 9 5.6s-.7.3-.7.7.3.7.7.7zm6 0c.4 0 .7-.3.7-.7s-.3-.7-.7-.7-.7.3-.7.7.3.7.7.7z"/>
+      </svg>
+      <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11.2l3.6-3.6L17 12l-5 5-5-5 1.4-1.4 3.6 3.6V3h1zM5 19h14v2H5v-2z"/></svg></span>
+    </a>
   </div>
 </header>
 
